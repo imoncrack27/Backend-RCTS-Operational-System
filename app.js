@@ -1,10 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-// const router = require("./routes/login");
-// const router = require("./routes/signup");
 const mongoose = require("mongoose");
-// const User = require("./models/user");
+const userRoutes = require("./routes/userRoutes");
 const app = express();
 
 //JWT secret key
@@ -31,6 +29,5 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cors());
 
-// routes;
-// app.use("/routes/login", router);
-// app.use("/routes/signup", router);
+//routes
+app.use(userRoutes);
