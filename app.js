@@ -1,15 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-// const cors = require("cors");
-// const userRoutes = require("./routes/users");
-// const authRoutes = require("./routes/auth");
+const cors = require("cors");
+// const router = require("./routes/login");
+// const router = require("./routes/signup");
 const mongoose = require("mongoose");
-const User = require("./models/user");
+// const User = require("./models/user");
 const app = express();
 
 //JWT secret key
-process.env.JWT_SECRET =
-  "058c77a13ababdcf25863e741ec859b11850a39b598a65934aa895477a5ed007";
+process.env.JWT_SECRET = "secret-key";
 
 // database URI
 const dbURI =
@@ -18,24 +17,20 @@ const dbURI =
 // database connection
 mongoose
   .connect(dbURI)
-  .then((result) => app.listen(3000))
+  .then((result) => app.listen(8000))
   .catch((err) => console.log(err));
 
-app.get("/login", (req, res) => {
-  const User = new User({
-    userName: "test",
-    email: "test123@gmail.com",
-    password: "password",
-    confirmPassword: "password",
-    contactNumber: 1234567890,
-    idNumber: "1234567890",
-  });
-});
+// Allow requests from specific origin
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
 
-// middlewares
-// app.use(express.json());
-// app.use(cors());
+app.use(cors(corsOptions));
 
-// routes
-// app.use("/api/users", userRoutes);
-// app.use("/api/auth", authRoutes);
+//middlewares;
+app.use(express.json());
+app.use(cors());
+
+// routes;
+// app.use("/routes/login", router);
+// app.use("/routes/signup", router);

@@ -1,3 +1,1 @@
 .env
-//
-process.env.JWT_SECRET

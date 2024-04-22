@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
-router.post("/login", async (req, res) => {
+router.post("http://localhost:5173/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
