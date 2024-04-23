@@ -1,10 +1,24 @@
-const express = require("express");
 const User = require("../models/userModel");
-const { uniq } = require("lodash");
+const jwt = require("jsonwebtoken");
+
+const createToken = (_id) => {
+  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
+};
 
 // Login controller
 const login = async (req, res) => {
-  res.json({ mssg: "login successful" });
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.login(email, password);
+
+    // create a token
+    const token = createToken(user._id);
+
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 // Signup controller
@@ -16,16 +30,20 @@ const signup = async (req, res) => {
       userName,
       email,
       phoneNumber,
-      password,
-      idNumber
+      idNumber,
+      password
     );
+
+    //create a token
+    const token = createToken(user._id);
 
     res.status(200).json({
       userName,
       email,
       phoneNumber,
-      password,
       idNumber,
+      password,
+      token,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

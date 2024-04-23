@@ -43,17 +43,17 @@ userSchema.statics.signup = async function (
     throw Error("All fields are required");
   }
 
+  if (!validator.isLength(password, { min: 8 })) {
+    throw Error("Password must be at least 8 characters");
+  }
+  if (!validator.isStrongPassword(password)) {
+    throw Error("Password must be strong");
+  }
   if (!validator.isEmail(email)) {
     throw Error("Invalid email");
   }
   if (!validator.isMobilePhone(phoneNumber)) {
     throw Error("Invalid phone number");
-  }
-  if (!validator.isStrongPassword(password)) {
-    throw Error("Password must be strong");
-  }
-  if (!validator.isLength(password, { min: 8 })) {
-    throw Error("Password must be at least 8 characters");
   }
 
   const exists = await this.findOne({ email });
@@ -72,6 +72,28 @@ userSchema.statics.signup = async function (
     idNumber,
     password: hash,
   });
+
+  return user;
+};
+
+//static login method
+userSchema.statics.login = async function (email, password) {
+  //validation
+  if (!email || !password) {
+    throw Error("All fields are required");
+  }
+
+  const user = await this.findOne({ email });
+
+  if (!user) {
+    throw Error("Invalid email");
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    throw Error("Invalid password");
+  }
 
   return user;
 };
